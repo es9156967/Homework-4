@@ -42,7 +42,7 @@ let questions = [
         choice4: "support",
         answer: 4,
     }
-];
+]; 
 
 //CONSTANTS//
 
@@ -53,11 +53,14 @@ beginGame = () => {
     questionCount = 0;
     score = 0;
     availableQuestions = [...questions];
-    console.log(availableQuestions); 
     getNewQuestion();
 };
 
 getNewQuestion = () => {
+
+    if(availableQuestions.length === 0 || questionCount >= max_questions) {
+        return window.location.assign('./index.html')
+    }
     questionCount++
     const questionIndex = Math.floor(Math.random() * availableQuestions.length);
     currentQuestion = availableQuestions[questionIndex];
@@ -71,7 +74,20 @@ getNewQuestion = () => {
     availableQuestions.splice(questionIndex, 1);
 
     acceptingAnswers = true;
-}
+};
+
+choices.forEach(choice => {
+    choice.addEventListener('click', e => {
+        if(!acceptingAnswers) return;
+
+        acceptingAnswers = false;
+        const selectedChoice = e.target;
+        const selectedAnswer = selectedChoice.dataset["number"];
+        console.log(selectedAnswer == currentQuestion.answer);
+        getNewQuestion();
+        
+    })
+})
 
 beginGame();
  
